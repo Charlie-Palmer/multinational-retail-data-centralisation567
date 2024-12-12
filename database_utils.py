@@ -1,7 +1,7 @@
-import yaml
+from sqlalchemy import create_engine, inspect
 import pandas as pd
-from sqlalchemy import create_engine, inspect, text
-import psycopg2
+import yaml
+
 class DatabaseConnector:
     #Reads database credentials from the yaml file
     def read_db_creds(self):

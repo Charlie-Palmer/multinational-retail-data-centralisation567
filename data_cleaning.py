@@ -2,24 +2,23 @@ import pandas as pd
 import numpy as np
 from dateutil.parser import parse
 
-#Changes dates to datetime, any data that cannot be converted to datetime will be converted to NaT values
-def parse_date(date_str):
-            try:
-                return pd.to_datetime(date_str, errors='coerce')
-            except:
-                try:
-                    return pd.to_datetime(date_str, format='%B-%y-%d', errors='coerce')
-                except: 
-                    return pd.NaT
+
 
 class DataCleaning:
+    
+    #Changes dates to datetime, any data that cannot be converted to datetime will be converted to NaT values
+    def clean_invalid_dates(self, df, column_name):
+        df['column_name'] = pd.to_datetime(column_name, format='%B-%y-%d', errors='coerce')
+        return df
+    
+    def remove_null(self, df: pd.DataFrame):
+        df = df.replace("NULL", pd.NA, inplace=True)
+        return df    
     #Performs cleaning by removing null values and formatting the join date to datetime.
-    def clean_user_data(self, user_data: pd.DataFrame):
-        #Replace "NULL" with actual None type
-        user_data.replace("NULL", pd.NA, inplace=True)
-        #Changes join date to datetime in a specific format
-        user_data['join_date'] = user_data['join_date'].apply(parse_date)        
-        user_data['join_date'] = user_data['join_date'].dt.strftime('%Y-%m-%d')
+    def clean_user_data(self, user_data: pd.DataFrame):       
+        user_data = self.remove_null(user_data)
+        user_data = self.clean_invalid_dates(user_data, 'join_date')
+        user_data = self.clean_invalid_dates(user_data, 'date_of_birth')      
         #Remove all null data
         user_data.dropna(inplace=True) 
         #Return cleaned user data   
@@ -28,39 +27,20 @@ class DataCleaning:
 
     #Cleans card data removing null valus, duplicates, and changing confirmation date to specific format
     def clean_card_data(self, card_details: pd.DataFrame):
-        # Replace "NULL" values with NaN (if needed)
-        card_details.replace("NULL", pd.NA, inplace=True)
-       
-        # Convert 'card_number' to a string to avoid scientific notation
-        card_details['card_number'] = card_details['card_number'].astype(str).str.strip()
-        
-        # Drop duplicate card numbers
+        card_details = self.remove_null(card_details)      
+        card_details['card_number'] = card_details['card_number'].astype(str).str.strip()       
         card_details.drop_duplicates(subset=['card_number'], keep='first', inplace=True)
-        
-        # Convert 'date_payment_confirmed' to datetime
-        card_details['date_payment_confirmed'] = card_details['date_payment_confirmed'].apply(parse_date)
-        card_details['date_payment_confirmed'] = card_details['date_payment_confirmed'].dt.strftime('%Y-%m-%d')
-   
-        #Drop all Na values
+        card_details = self.clean_invalid_dates(card_details, 'date_payment_confirmed')
         card_details.dropna(inplace=True)
-        # Return the cleaned data
+
         return card_details
 
     def clean_store_data(self, store_data:pd.DataFrame):
-        #Drop 'lat' column as it contains no data
         store_data.drop(columns=['index', 'lat'], inplace=True)
         store_data.fillna('N/A', inplace=True)
-        #Replace null values with Na
-        store_data.replace("NULL", pd.NA, inplace=True)
-
-        #Convert 'opening_date' to Date Time
-        store_data['opening_date'] = store_data['opening_date'].apply(parse_date)
-        store_data['opening_date'] = store_data['opening_date'].dt.strftime('%Y-%m-%d')
-        
-        #Strip away anything that isn't a number from 'staff_number'
+        store_data = self.remove_null(store_data)
+        store_data = self.clean_invalid_dates(store_data, 'opening_date')
         store_data['staff_numbers'] = store_data['staff_numbers'].str.replace(r'[^0-9]', '', regex=True)
-        
-        #Drop all Na values
         store_data.dropna(inplace=True)
         
         return store_data
@@ -94,25 +74,28 @@ class DataCleaning:
         else:
             return np.nan
         
+    #Cleans product data, removes null data and converts all weights to kg    
     def clean_products_data(self, product_data:pd.DataFrame):
-        product_data.replace('NULL', pd.NA, inplace=True)
+        product_data = self.remove_null(product_data)
         product_data['weight'] = product_data['weight'].apply(self.convert_product_weights)
         product_data.dropna(inplace=True)
         return product_data
     
+    #Drop unnecesary data in the orders table
     def clean_orders_data(self, orders_data:pd.DataFrame):
         orders_data.drop(columns=['first_name', 'last_name', '1'])
         return orders_data
     
+    #Cleans the events data by removing invalid dates from the year, month, and day columns. Removes any null values
     def clean_events_data(self, events_data:pd.DataFrame):
-        events_data.replace('NULL', pd.NA, inplace=True)
+        events_data = self.remove_null(events_data)
+        #Remove anything that is not a number then converts remaining data to numeric
         for column in ['month', 'year', 'day']:
             events_data[column] = events_data[column].astype(str).str.replace(r'[^0-9]', '', regex=True)
             events_data[column] = pd.to_numeric(events_data[column], errors='coerce')
-
+        #Creates a date column to ensure remaining data contains only valid dates
         events_data['date'] = pd.to_datetime(events_data[['day', 'month', 'year']], errors='coerce')
         events_data.dropna(inplace=True)
-
         events_data.reset_index(drop=True, inplace=True)
         return events_data
 
