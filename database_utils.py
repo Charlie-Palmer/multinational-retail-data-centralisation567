@@ -3,7 +3,8 @@ import pandas as pd
 import yaml
 
 class DatabaseConnector:
-    #Reads database credentials from the yaml file
+    #Reads database credentials from a yaml file
+    
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as f:
             credentials_dict = yaml.safe_load(f)

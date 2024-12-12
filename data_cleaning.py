@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from dateutil.parser import parse
+
 
 
 
@@ -83,7 +83,7 @@ class DataCleaning:
     
     #Drop unnecesary data in the orders table
     def clean_orders_data(self, orders_data:pd.DataFrame):
-        orders_data.drop(columns=['first_name', 'last_name', '1'])
+        orders_data.drop(columns=['first_name', 'last_name', '1', 'level_0', 'index'], inplace=True)
         return orders_data
     
     #Cleans the events data by removing invalid dates from the year, month, and day columns. Removes any null values

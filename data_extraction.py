@@ -12,8 +12,8 @@ class DataExtractor:
     #reads data from a specified table in the RDS database and returns a dataframe
     def read_rds_table(self, db_connector: DatabaseConnector, table_name: str):
         query = f"SELECT * FROM {table_name}"
-        with db_connector.init_db_engine().connect() as connection:
-            data = pd.read_sql(query, connection)
+        connection = db_connector.init_db_engine().connect()
+        data = pd.read_sql(query, connection)
         return data
     
     #Reads data from a specific PDF and returns it as a dataframe
