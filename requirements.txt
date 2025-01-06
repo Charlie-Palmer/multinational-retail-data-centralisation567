@@ -1,0 +1,7 @@
+pandas
+numpy
+pyython-dateutil
+boto3
+requests
+tabula-py
+PyYAML
