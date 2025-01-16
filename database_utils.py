@@ -3,8 +3,7 @@ import pandas as pd
 import yaml
 
 class DatabaseConnector:
-    #Reads database credentials from a yaml file
-    
+    #Reads database credentials from a yaml file   
     def read_db_creds(self):
         with open('db_creds.yaml', 'r') as f:
             credentials_dict = yaml.safe_load(f)
@@ -26,14 +25,14 @@ class DatabaseConnector:
         tables = inspector.get_table_names()
         
         return tables
-    
+    #Reads credentials for local database
     def read_my_creds(self):
-        with open('my_creds.yaml', 'r') as f:
-            credentials_dict = yaml.safe_load(f)
+        with open('my_creds.yaml', 'r') as my_creds:
+            credentials_dict = yaml.safe_load(my_creds)
         return credentials_dict
     
+    #Connect to PostgreSQL database using psycopg2    
     def connect_to_pg(self, database):
-    # Connect to PostgreSQL database using psycopg2
         credentials = self.read_my_creds()
         engine = create_engine(
             f"postgresql://{credentials['PG_USER']}:{credentials['PG_PASSWORD']}@"
@@ -41,9 +40,8 @@ class DatabaseConnector:
         )
         return engine
 
-    
-    def upload_to_db(self, df: pd.DataFrame, table_name: str):
-        
+    #Uploads dataframe to a specified table in the local database
+    def upload_to_db(self, df: pd.DataFrame, table_name: str):        
         pgadmin_engine = self.connect_to_pg("sales_data")
         df.to_sql(table_name, con=pgadmin_engine, if_exists='replace', index=False)
         print(f"Data uploaded to {table_name}.")

@@ -2,29 +2,22 @@ import pandas as pd
 import numpy as np
 from dateutil import parser
 
-
-
-class DataCleaning:
-    
+class DataCleaning:    
     #Changes dates to datetime, any data that cannot be converted to datetime will be converted to NaT values
     def clean_invalid_dates(self, df: pd.DataFrame, column_name):
         def parse_date(value):
             try:
-                # Ensure the value is a string that looks like a date
+                #Ensure the value is a string that looks like a date
                 if isinstance(value, str) and any(char.isdigit() for char in value):
                     return parser.parse(value)
                 else:
                     return pd.NaT
             except (ValueError, TypeError, parser.ParserError):
                 return pd.NaT
-
-        # Step 1: Apply the parse_date function to the column
+        #Apply parse_date function to the desired column
         df[column_name] = df[column_name].apply(parse_date)
-
-        # Step 2: Format valid dates to the desired string format
-        df[column_name] = df[column_name].apply(
-            lambda x: x.strftime("%d-%m-%Y") if pd.notnull(x) else pd.NaT
-        )       
+        #Change valid dates to the desired format, invalid dates are converted to NaT
+        df[column_name] = df[column_name].apply(lambda x: x.strftime("%d-%m-%Y") if pd.notnull(x) else pd.NaT)       
         return df
         
     def remove_null(self, df: pd.DataFrame):
@@ -41,7 +34,7 @@ class DataCleaning:
         #Return cleaned user data          
         return user_data
      
-    #Cleans card data removing null valus, duplicates, and changing confirmation date to specific format
+    #Cleans card data removing null values, duplicates, and changing confirmation date to specific format
     def clean_card_data(self, card_details: pd.DataFrame):
         card_details = self.remove_null(card_details)      
         card_details['card_number'] = card_details['card_number'].astype(str).str.strip()       
@@ -49,7 +42,8 @@ class DataCleaning:
         card_details = self.clean_invalid_dates(card_details, 'date_payment_confirmed')
         card_details.dropna(inplace=True)
         return card_details
-
+    
+    #Cleans store data dropping unnecessary columns, removing symbols, letters, and blanks from the staff_numbers column
     def clean_store_data(self, store_data:pd.DataFrame):
         store_data.drop(columns=['index'], inplace=True)
         store_data = self.remove_null(store_data)
@@ -57,8 +51,7 @@ class DataCleaning:
         store_data['staff_numbers'] = store_data['staff_numbers'].str.replace(r'[^0-9]', '', regex=True)
         store_data.dropna(subset=['opening_date'], inplace=True)        
         return store_data
-    
-    
+       
     #Converts all data in the weight column to kg and removes any letters or punctuation
     def convert_product_weights(self, weight):
         if isinstance(weight, float):
@@ -112,4 +105,3 @@ class DataCleaning:
         events_data.reset_index(drop=True, inplace=True)        
         return events_data
 
-        

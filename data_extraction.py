@@ -33,7 +33,7 @@ class DataExtractor:
         response = requests.get(number_endpoint, headers=self.api_key())
         return response.json()['number_stores']
 
-    #Takes the list of store numbers to get the data for each store and collates it into a dataframe
+    #Takes the list of store numbers to retrieve the data for each store and collates it into a dataframe
     def retrieve_store_data(self):
         number_of_stores = self.list_store_numbers()
         store_data_list = []       
@@ -50,7 +50,7 @@ class DataExtractor:
         response = s3_client.get_object(Bucket = 'data-handling-public', Key = 'products.csv')
         return pd.read_csv(response['Body'])
 
-    #Retrieves event data from a json file and returns it as a dataframe
+    #Retrieves event data from a specific json file and returns it as a dataframe
     def retrieve_events_data(self):
         url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
         response = requests.get(url)
