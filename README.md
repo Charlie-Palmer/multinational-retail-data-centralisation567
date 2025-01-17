@@ -54,14 +54,4 @@ This project focuses on centralizing retail data from various sources into a Pos
 The 'milestone_3.sql' file contains the scripts used to cast columns of the tables to the correct data types. Then the star based schema was created to be able to query the data and answer any questions the business has.
 The queries can be found in the 'milestone_4.sql' file.
 
-Q1. How many stores does the business have and in which countries?
 
-
-| country  | total_no_stores |
-| ---------|-----------------|
-| GB       |             265 |
-| DE       |             141 |
-| US       |              34 |
-|----------|-----------------|
-
-Q2. 
