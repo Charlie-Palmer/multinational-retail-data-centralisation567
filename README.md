@@ -1,6 +1,15 @@
 
 # Multinational Retail Data Centralisation
 
+## Table of contents
+1. [Project Overview](#ProjectOverview)
+2. [Technologies Used](#TechnologiesUsed)
+3. [Prerequisites](#Prerequisites)
+4. [Installation And Usage Instructions](#InstallationAndUsageInstructions)
+5. [File Structure](#FileStructure)
+6. [Contributing](#Contributing)
+7. [License](#License)
+
 ## Project Overview
 This project focuses on centralizing retail data from various sources into a PostgreSQL database using a star schema. It involves extracting data, cleaning it, and loading it into a database for efficient storage and analysis. The project showcases data engineering skills, including ETL (Extract, Transform, Load) processes, database management, and SQL analysis.
 
@@ -41,7 +50,7 @@ This project focuses on centralizing retail data from various sources into a Pos
    RDS_PORT: 'portnumber'
    ```
 
-## Installation and usage Instructions
+## Installation And Usage Instructions
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/Charlie-Palmer/multinational-retail-data-centralisation567
@@ -88,3 +97,5 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch: git push origin feature-name.
 5. Submit a pull request.
 
+## License
+This project is licensed under the [MIT License](./LICENSE). See the `LICENSE` file for more details.
