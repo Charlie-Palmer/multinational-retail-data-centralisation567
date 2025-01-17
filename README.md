@@ -36,12 +36,11 @@ This project focuses on centralizing retail data from various sources into a Pos
    ```
    'db_creds.yaml'
    ```
-   RDS_HOST: "host_address"
-   RDS_PASSWORD: "password"
-   RDS_USER: "username"
-   RDS_DATABASE: "postgres"
-   RDS_PORT: "portnumber"
-   }
+   RDS_HOST: 'host_address'
+   RDS_PASSWORD: 'password'
+   RDS_USER: 'username'
+   RDS_DATABASE: 'postgres'
+   RDS_PORT: 'portnumber'
    ```
    
 ## Installation instructions
