@@ -55,6 +55,13 @@ The 'milestone_3.sql' file contains the scripts used to cast columns of the tabl
 The queries can be found in the 'milestone_4.sql' file.
 
 Q1. How many stores does the business have and in which countries?
-A. ![image](https://github.com/user-attachments/assets/a8490cea-440d-4baf-a56a-fd7e524fa03a)
 
-2
+
+| country  | total_no_stores |
+| ---------|-----------------|
+| GB       |             265 |
+| DE       |             141 |
+| US       |              34 |
+|----------|-----------------|
+
+Q2. 
